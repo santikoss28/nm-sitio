@@ -6,7 +6,8 @@
   var CUENTAS = CF.cuentas || [];
   var CHECKOUT_URL = CF.checkoutUrl || "";
   var VARIETIES = CF.variedades;
-  var SIZES = [125, 250, 500];
+  var SIZES = [250, 500];
+  var SIZE_NAME = { 250: "Media libra", 500: "1 libra" };
   var GRINDS = [
     { id: "grano", label: "En grano (entero)", short: "En grano", tip: "Lo muelo yo en casa, justo antes de preparar." },
     { id: "gruesa", label: "Molienda gruesa", short: "Molienda gruesa", tip: "Prensa francesa y cold brew." },
@@ -68,19 +69,19 @@
       return;
     }
     var pct = Math.max(0, Math.min(100, (v.puntaje - 80) / 20 * 100));
-    var notes = v.sabor.split(",").map(function (s) { return '<span class="note">' + esc(cap(s)) + "</span>"; }).join("");
+    var notes = (v.sabor || "").split(",").filter(function (s) { return s.trim(); }).map(function (s) { return '<span class="note">' + esc(cap(s)) + "</span>"; }).join("");
     var rows = [["Proceso", v.proceso], ["Aroma", v.aroma], ["Sabor", v.sabor], ["Acidez", v.acidez], ["Cuerpo", v.cuerpo], ["Altura", v.altura], ["Origen", v.origen]]
       .filter(function (r) { return r[1]; })
       .map(function (r) { return "<div><dt>" + r[0] + "</dt><dd>" + esc(r[1]) + "</dd></div>"; }).join("");
     var html = '<div class="ficha-top"><div><p class="tag">Ficha de cata</p><h3>' + esc(v.nombre) + "</h3></div>" +
       '<div class="ficha-score"><b>' + v.puntaje + "</b><span>puntos en taza sobre 100</span></div></div>" +
-      '<div class="notes" aria-label="Notas de sabor">' + notes + "</div>" +
+      (notes ? '<div class="notes" aria-label="Notas de sabor">' + notes + "</div>" : "") +
       '<div class="scale" role="img" aria-label="Escala de 80 a 100 puntos. Este café está en ' + v.puntaje + '."><div class="scale-spec"></div>' +
       '<div class="scale-mark" style="left:' + pct + '%"><span>' + v.puntaje + "</span></div>" +
       '<span class="tick" style="left:0%">80</span><span class="tick" style="left:25%">85</span><span class="tick" style="left:50%">90</span>' +
       '<span class="tick" style="left:75%">95</span><span class="tick" style="left:100%">100</span>' +
       '<span class="scale-note">Desde 80 puntos es café de especialidad</span></div>' +
-      '<dl class="attrs">' + rows + "</dl>";
+      (rows ? '<dl class="attrs">' + rows + "</dl>" : "");
     if (v.foto) html += $("foto-tpl").innerHTML;
     box.innerHTML = html;
   }
@@ -94,7 +95,7 @@
     sizesBox.innerHTML = "";
     SIZES.forEach(function (s) {
       var lab = el("label", { "class": "sz" },
-        '<input type="radio" name="size" value="' + s + '"' + (s === cur.size ? " checked" : "") + "><b>" + s + " g</b><span>" + cop(priceOf(v, s)) + "</span>");
+        '<input type="radio" name="size" value="' + s + '"' + (s === cur.size ? " checked" : "") + "><b>" + s + " g</b><small>" + SIZE_NAME[s] + "</small><span>" + cop(priceOf(v, s)) + "</span>");
       lab.querySelector("input").addEventListener("change", function () { cur.size = s; renderBuy(); });
       sizesBox.appendChild(lab);
     });

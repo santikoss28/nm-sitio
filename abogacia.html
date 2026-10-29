@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Asesoría jurídica · Nicole Montes, abogada</title>
-<meta name="description" content="Asesoría jurídica clara y cercana: familia, contratos, laboral, inmuebles y más. Consulta virtual o presencial.">
+<meta name="description" content="Cuenta tu caso en un minuto y consulta cómo va tu proceso desde esta página. Familia, contratos, laboral, inmuebles y más.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Asesoría jurídica · Nicole Montes, abogada">
-<meta property="og:description" content="Asesoría jurídica clara y cercana: familia, contratos, laboral, inmuebles y más. Consulta virtual o presencial.">
+<meta property="og:description" content="Cuenta tu caso en un minuto y consulta cómo va tu proceso desde esta página.">
 <meta name="theme-color" content="#0d3b4a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,13 +25,65 @@
       <p class="lead" id="hero-text"></p>
       <div class="cred" id="cred"></div>
       <div class="cta-row">
-        <a class="btn btn-gold arrow" href="#consulta">Pedir una consulta</a>
-        <a class="btn btn-line" href="#areas">Ver áreas de atención</a>
+        <a class="btn btn-gold arrow" href="#consulta">Contar mi caso</a>
+        <a class="btn btn-line" href="#seguimiento">Consultar mi proceso</a>
       </div>
     </div>
     <svg class="ridge" viewBox="0 0 1200 110" preserveAspectRatio="none" aria-hidden="true" focusable="false">
       <path d="M0 110 L0 78 L90 52 L170 70 L280 24 L370 62 L470 36 L560 74 L680 18 L770 58 L860 40 L960 72 L1060 34 L1130 56 L1200 44 L1200 110 Z"/>
     </svg>
+  </section>
+
+  <section class="section" id="consulta">
+    <div class="wrap">
+      <p class="eyebrow">Paso 1 · Cuéntanos</p>
+      <h2>Cuéntanos tu caso en un minuto</h2>
+      <p class="intro">Escribe una reseña corta de lo que ocurrió. Te damos un código para que puedas ver cómo va tu proceso cuando quieras. No incluyas contraseñas ni documentos: los pedimos después, por un canal acordado.</p>
+      <form class="order" id="consulta-form" autocomplete="off" style="margin-top:32px;max-width:760px">
+        <div class="fields">
+          <div class="fields-2">
+            <div class="field"><label for="a-nombre">Tu nombre</label><input id="a-nombre" type="text" maxlength="80" placeholder="Nombre y apellido" autocomplete="name"></div>
+            <div class="field"><label for="a-tel">Tu celular</label><input id="a-tel" type="text" inputmode="tel" maxlength="25" placeholder="Ej. 300 123 4567" autocomplete="tel"></div>
+          </div>
+          <div class="fields-2">
+            <div class="field"><label for="a-tema">¿Sobre qué es?</label><select id="a-tema"></select></div>
+            <div class="field"><label for="a-ciudad">Ciudad</label><input id="a-ciudad" type="text" maxlength="60" placeholder="Ej. Neiva"></div>
+          </div>
+          <div class="field"><label for="a-caso">Reseña de tu caso o proceso</label><textarea id="a-caso" maxlength="1500" placeholder="Qué ocurrió, desde cuándo y qué buscas lograr. Si ya tienes un proceso en curso, cuéntanos en qué va."></textarea></div>
+        </div>
+        <div class="order-actions">
+          <button class="btn btn-solid btn-wide" id="a-enviar" type="submit">Enviar mi caso</button>
+          <a class="btn btn-ghost btn-wide" id="a-wa" href="#" target="_blank" rel="noopener">Prefiero enviarlo por WhatsApp</a>
+        </div>
+        <p class="status" id="a-estado" role="status"></p>
+        <div class="resultado" id="a-ok" hidden>
+          <p class="r-tag">Tu caso quedó registrado</p>
+          <p class="r-code" id="a-codigo"></p>
+          <p>Guarda este código. Con él y tu celular puedes ver cómo va tu proceso más abajo, en <a href="#seguimiento">Consultar mi proceso</a>. Te escribiremos pronto.</p>
+          <button class="btn btn-ghost btn-sm" id="a-copiar" type="button">Copiar código</button>
+        </div>
+        <p class="phones">También puedes escribir directo: <b data-tels></b></p>
+      </form>
+    </div>
+  </section>
+
+  <section class="section trust" id="seguimiento">
+    <div class="wrap">
+      <p class="eyebrow">Paso 2 · Seguimiento</p>
+      <h2>¿Cómo va tu proceso?</h2>
+      <p class="intro" id="s-intro">Escribe tu código y el celular con el que registraste el caso.</p>
+      <form class="order seguir" id="seguir-form" autocomplete="off" style="margin-top:32px;max-width:760px">
+        <div class="fields-2">
+          <div class="field"><label for="s-codigo">Código del caso</label><input id="s-codigo" type="text" maxlength="20" placeholder="NM-XXXXXXXX" autocapitalize="characters"></div>
+          <div class="field"><label for="s-tel">Celular</label><input id="s-tel" type="text" inputmode="tel" maxlength="25" placeholder="El que usaste al registrarte"></div>
+        </div>
+        <div class="order-actions">
+          <button class="btn btn-solid btn-wide" id="s-ver" type="submit">Ver mi proceso</button>
+        </div>
+        <p class="status" id="s-estado" role="status"></p>
+        <div class="resultado" id="s-res" hidden></div>
+      </form>
+    </div>
   </section>
 
   <section class="section" id="areas">
@@ -42,49 +94,12 @@
     </div>
   </section>
 
-  <section class="section trust">
-    <div class="wrap">
-      <p class="eyebrow">Cómo trabajamos</p>
-      <h2>Cuatro pasos, sin sorpresas</h2>
-      <ol class="pasos" id="pasos"></ol>
-    </div>
-  </section>
-
-  <section class="section" id="consulta">
-    <div class="wrap">
-      <p class="eyebrow">Consulta</p>
-      <h2>Cuéntanos tu caso</h2>
-      <p class="intro">Completa lo que sepas. El mensaje se arma solo y se abre en WhatsApp para que lo envíes. No incluyas datos sensibles ni documentos: los pedimos después, por un canal acordado.</p>
-      <form class="order" id="consulta-form" autocomplete="off" style="margin-top:32px;max-width:760px">
-        <div class="fields">
-          <div class="fields-2">
-            <div class="field"><label for="a-nombre">Tu nombre</label><input id="a-nombre" type="text" maxlength="80" placeholder="Nombre y apellido"></div>
-            <div class="field"><label for="a-ciudad">Ciudad</label><input id="a-ciudad" type="text" maxlength="60" placeholder="Ej. Neiva"></div>
-          </div>
-          <div class="fields-2">
-            <div class="field"><label for="a-tema">Tema</label><select id="a-tema"></select></div>
-            <div class="field"><label for="a-modalidad">Modalidad</label><select id="a-modalidad"><option>Virtual (videollamada o WhatsApp)</option><option>Presencial en Neiva</option><option>Sin preferencia</option></select></div>
-          </div>
-          <div class="field"><label for="a-caso">Resumen de tu situación</label><textarea id="a-caso" maxlength="600" placeholder="Qué ocurrió, desde cuándo y qué buscas lograr."></textarea></div>
-        </div>
-        <p class="preview-label">Mensaje que se enviará</p>
-        <div class="preview" id="a-preview" aria-live="polite"></div>
-        <div class="order-actions">
-          <a class="btn btn-solid btn-wide" id="a-enviar" href="#" target="_blank" rel="noopener">Abrir WhatsApp con mi consulta</a>
-          <button class="btn btn-ghost btn-wide" id="a-copiar" type="button">Copiar mensaje</button>
-        </div>
-        <p class="status" id="a-estado" role="status"></p>
-        <p class="phones">También puedes escribir directo: <b data-tels></b></p>
-      </form>
-      <p class="aviso" id="aviso"></p>
-    </div>
-  </section>
-
   <section class="section story-sec" id="dudas">
     <div class="wrap">
       <p class="eyebrow">Preguntas frecuentes</p>
       <h2>Antes de escribir</h2>
       <div class="faq" id="faq"></div>
+      <p class="aviso" id="aviso"></p>
     </div>
   </section>
 

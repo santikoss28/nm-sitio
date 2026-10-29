@@ -52,7 +52,10 @@ supabase link --project-ref TU_REF        # el REF sale en Project Settings > Ge
 supabase functions deploy create-checkout --no-verify-jwt
 supabase functions deploy mp-webhook --no-verify-jwt
 supabase functions deploy admin-orders --no-verify-jwt
+supabase functions deploy caso --no-verify-jwt
+supabase functions deploy admin-casos --no-verify-jwt
 ```
+(`caso` y `admin-casos` son para el seguimiento de casos de abogacía; ver "Casos jurídicos" más abajo. Si ya habías corrido `schema.sql`, vuelve a pegarlo y ejecutarlo: solo agrega la tabla `casos`.)
 Tus URLs serán `https://TU_REF.supabase.co/functions/v1/<nombre-de-la-función>`.
 
 ## 5. Guardar los secretos
@@ -89,8 +92,17 @@ supabase secrets set MP_ACCESS_TOKEN="TEST-..." \
 
 ---
 
+## Casos jurídicos (reseña y seguimiento en `abogacia.html`)
+- El cliente cuenta su caso en la página y recibe un **código** (ej. `NM-7K2M9QXA`). Luego, con el código y su celular, ve el estado y las novedades de su proceso.
+- Para activarlo: en `contenido.js`, bloque `abogacia`, escribe `casosUrl: "https://TU_REF.supabase.co/functions/v1/caso"`. En `admin.html` escribe `var API_CASOS = "https://TU_REF.supabase.co/functions/v1/admin-casos";`.
+- Mientras `casosUrl` esté vacío, la página funciona por WhatsApp y no muestra la consulta en línea.
+- En `admin.html` (pestaña **Casos jurídicos**) cambias el estado y escribes una **novedad**: esa novedad es lo que el cliente ve al consultar. La **nota interna** es privada.
+- Te llega un correo por cada caso nuevo (usa `RESEND_API_KEY` y `NOTIFY_EMAIL`).
+- Privacidad: el cliente solo ve el tema, el estado y las novedades que tú escribes, nunca su reseña completa ni datos de otros. No escribas en las novedades información sensible.
+
 ## Mantenimiento
-- **Cambiar precios:** edita `supabase/functions/_shared/catalog.ts` (precios reales, los que se cobran) **y** ``precios` en `contenido.js` (lo que ve el cliente). Luego `supabase functions deploy create-checkout --no-verify-jwt`. Si no coinciden, el cliente verá un precio y se le cobrará otro: revisa ambos.
+- **Precios actuales:** Castillo 250 g $20.000 y 500 g $40.000; Borbón rosado 250 g $33.000 y 500 g $65.000 (bolsas de 250 g y 500 g únicamente).
+- **Cambiar precios:** edita `supabase/functions/_shared/catalog.ts` (precios reales, los que se cobran) **y** `precios` en `contenido.js` (lo que ve el cliente). Luego `supabase functions deploy create-checkout --no-verify-jwt`. Si no coinciden, el cliente verá un precio y se le cobrará otro: revisa ambos.
 - **Envío:** el cobro incluye solo el café; el envío se coordina por WhatsApp con el cliente (el texto de la tienda ya lo dice: "sin envío").
 - **Comisión:** Mercado Pago descuenta su comisión de cada venta (consulta la tarifa vigente en tu cuenta; en Colombia ronda ~3% + valor fijo + IVA, y el dinero se libera en pocos días).
 - **Si `checkoutUrl` queda vacío**, la tienda funciona como antes: pedido por WhatsApp + transferencia.

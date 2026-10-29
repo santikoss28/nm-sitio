@@ -92,23 +92,84 @@
     if (A.universidad) cred.push(A.universidad);
     $("cred").innerHTML = cred.map(function (c) { return '<span class="chip">' + esc(c) + "</span>"; }).join("");
     $("areas-list").innerHTML = A.servicios.map(function (s) { return '<article class="area"><h3>' + esc(s.titulo) + "</h3><p>" + esc(s.texto) + "</p></article>"; }).join("");
-    $("pasos").innerHTML = A.pasos.map(function (p) { return "<li><b>" + esc(p.titulo) + "</b><span>" + esc(p.texto) + "</span></li>"; }).join("");
     $("faq").innerHTML = A.preguntas.map(function (q) { return "<details><summary>" + esc(q.p) + "</summary><p>" + esc(q.r) + "</p></details>"; }).join("");
     $("aviso").textContent = A.aviso;
     var tema = $("a-tema");
     A.servicios.forEach(function (s) { var o = document.createElement("option"); o.textContent = s.titulo; tema.appendChild(o); });
     var oo = document.createElement("option"); oo.textContent = "Otro / no estoy seguro"; tema.appendChild(oo);
-    composer({
-      form: "consulta-form", link: "a-enviar", copy: "a-copiar", status: "a-estado", preview: "a-preview",
-      build: function () {
-        var l = ["Hola, quisiera una asesoría jurídica.", "", "Tema: " + tema.value, "Modalidad: " + $("a-modalidad").value];
-        if (val("a-nombre")) l.push("Nombre: " + val("a-nombre"));
-        if (val("a-ciudad")) l.push("Ciudad: " + val("a-ciudad"));
-        if (val("a-caso")) l.push("", "Mi situación: " + val("a-caso"));
-        l.push("", "Quedo atento a su respuesta para agendar la consulta.");
-        return l.join("\n");
+
+    var API = A.casosUrl || "";
+    var post = function (body) {
+      return fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+        .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.error || "Error"); return d; }); });
+    };
+    var fail = function (e) { return e && e.message && e.message !== "Failed to fetch" ? e.message : "No pudimos conectar. Intenta de nuevo o escríbenos por WhatsApp."; };
+    var store = function (k, v) { try { if (v == null) return localStorage.getItem(k) || ""; localStorage.setItem(k, v); } catch (e) { return ""; } };
+
+    /* --- Paso 1: contar el caso --- */
+    var aForm = $("consulta-form"), aSend = $("a-enviar"), aWa = $("a-wa"), aStatus = $("a-estado");
+    function casoText() {
+      var l = ["Hola, quisiera una asesoría jurídica.", "", "Tema: " + tema.value];
+      if (val("a-nombre")) l.push("Nombre: " + val("a-nombre"));
+      if (val("a-tel")) l.push("Celular: " + val("a-tel"));
+      if (val("a-ciudad")) l.push("Ciudad: " + val("a-ciudad"));
+      if (val("a-caso")) l.push("", "Mi situación: " + val("a-caso"));
+      l.push("", "Quedo atento a su respuesta.");
+      return l.join("\n");
+    }
+    var refreshWa = function () { aWa.href = wa(casoText()); };
+    aForm.addEventListener("input", refreshWa); aForm.addEventListener("change", refreshWa); refreshWa();
+    if (!API) { aSend.hidden = true; aWa.className = "btn btn-solid btn-wide"; aWa.textContent = "Enviar mi caso por WhatsApp"; }
+    aForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!API || aSend.disabled) return;
+      if (!val("a-nombre") || val("a-tel").replace(/\D/g, "").length < 7 || val("a-caso").length < 10) {
+        aStatus.textContent = "Completa tu nombre, tu celular y una breve reseña de tu caso."; return;
       }
+      aSend.disabled = true; aSend.textContent = "Enviando…"; aStatus.textContent = "";
+      post({ accion: "nuevo", nombre: val("a-nombre"), tel: val("a-tel"), ciudad: val("a-ciudad"), tema: tema.value, resumen: val("a-caso") })
+        .then(function (d) {
+          $("a-codigo").textContent = d.codigo; $("a-ok").hidden = false;
+          $("s-codigo").value = d.codigo; $("s-tel").value = val("a-tel"); store("nm-caso", d.codigo);
+          aSend.textContent = "Caso enviado"; $("a-ok").scrollIntoView({ block: "nearest" });
+        })
+        .catch(function (er) { aSend.disabled = false; aSend.textContent = "Enviar mi caso"; aStatus.textContent = fail(er); });
     });
+    $("a-copiar").addEventListener("click", function () {
+      var c = $("a-codigo").textContent;
+      try { navigator.clipboard.writeText(c).then(function () { aStatus.textContent = "Código copiado."; }, function () { aStatus.textContent = "Copia el código a mano: " + c; }); }
+      catch (e) { aStatus.textContent = "Copia el código a mano: " + c; }
+    });
+
+    /* --- Paso 2: seguimiento --- */
+    var sForm = $("seguir-form"), sStatus = $("s-estado"), sRes = $("s-res");
+    if (!API) {
+      $("s-intro").textContent = "La consulta en línea estará disponible muy pronto. Mientras tanto, pregúntanos por WhatsApp cómo va tu proceso.";
+      sForm.innerHTML = '<a class="btn btn-solid btn-wide" target="_blank" rel="noopener" href="' + wa("Hola, quisiera saber cómo va mi proceso. Mi nombre es ___ y mi celular es ___.") + '">Preguntar cómo va mi proceso</a>';
+    } else {
+      $("s-codigo").value = store("nm-caso");
+      var fecha = function (iso) { return new Date(iso).toLocaleDateString("es-CO", { day: "numeric", month: "long", year: "numeric" }); };
+      sForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var btn = $("s-ver");
+        if (btn.disabled) return;
+        if (!val("s-codigo") || !val("s-tel")) { sStatus.textContent = "Escribe el código y tu celular."; return; }
+        btn.disabled = true; btn.textContent = "Consultando…"; sStatus.textContent = ""; sRes.hidden = true;
+        post({ accion: "consultar", codigo: val("s-codigo"), tel: val("s-tel") })
+          .then(function (d) {
+            var ups = (d.actualizaciones || []).slice().reverse().map(function (u) {
+              return "<li><time>" + esc(fecha(u.fecha)) + "</time><span>" + esc(u.mensaje) + "</span></li>";
+            }).join("");
+            sRes.innerHTML = '<p class="r-tag">' + esc(d.tema) + " · registrado el " + esc(fecha(d.creado)) + "</p>" +
+              '<p class="r-estado" data-e="' + esc(d.estado) + '">' + esc(d.estado) + "</p>" +
+              "<p>" + esc((A.estados || {})[d.estado] || "") + "</p>" +
+              (ups ? '<p class="r-tag" style="margin-top:18px">Novedades</p><ul class="r-news">' + ups + "</ul>" : "");
+            sRes.hidden = false; store("nm-caso", val("s-codigo").toUpperCase());
+          })
+          .catch(function (er) { sStatus.textContent = fail(er); })
+          .then(function () { btn.disabled = false; btn.textContent = "Ver mi proceso"; });
+      });
+    }
   }
 
   /* ---------- Turismo ---------- */

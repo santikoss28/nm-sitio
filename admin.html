@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>Pedidos · Montaña Luminosa</title>
+<title>Panel · Pedidos y casos</title>
 <style>
 :root{--bg:#efe4cd;--card:#fbf5e8;--ink:#2b1b14;--muted:#65503f;--line:#cdb995;--btn:#26160e;--btn-ink:#f3e7d1;--ok:#2f6b3b;--bad:#a63a26}
 @media (prefers-color-scheme:dark){:root{--bg:#170f0b;--card:#21150f;--ink:#f1e5cf;--muted:#c0aa90;--line:#3d2a1e;--btn:#e0a156;--btn-ink:#1d110b;--ok:#7fc58d;--bad:#ef8a76}}
@@ -26,33 +26,49 @@ input,select,textarea{background:var(--card);border:1px solid var(--line);border
 </head>
 <body>
 <main>
-<h1>Pedidos · Montaña Luminosa</h1>
+<h1>Panel · Pedidos y casos</h1>
 <div id="login">
   <p class="m">Escribe tu clave de administrador (la de ADMIN_TOKEN).</p>
   <div class="bar"><input id="tok" type="password" placeholder="Clave" autocomplete="current-password" style="max-width:320px"><button id="go">Entrar</button></div>
 </div>
 <div id="app" hidden>
   <div class="bar">
-    <select id="f"><option value="">Todos</option><option>pendiente</option><option>pagado</option><option>enviado</option><option>entregado</option><option>rechazado</option><option>cancelado</option></select>
-    <button class="g" id="rf">Actualizar</button><button class="g" id="out">Salir</button>
-    <span class="m" id="sum" style="align-self:center"></span>
+    <button id="t-ped">Pedidos de café</button><button class="g" id="t-cas">Casos jurídicos</button>
+    <button class="g" id="out">Salir</button>
   </div>
-  <div id="list"></div>
+  <div id="pedidos">
+    <div class="bar">
+      <select id="f"><option value="">Todos</option><option>pendiente</option><option>pagado</option><option>enviado</option><option>entregado</option><option>rechazado</option><option>cancelado</option></select>
+      <button class="g" id="rf">Actualizar</button>
+      <span class="m" id="sum" style="align-self:center"></span>
+    </div>
+    <div id="list"></div>
+  </div>
+  <div id="casos" hidden>
+    <div class="bar">
+      <select id="cf"><option value="">Todos</option><option>recibido</option><option>en revisión</option><option>pendiente de documentos</option><option>en trámite</option><option>finalizado</option></select>
+      <button class="g" id="crf">Actualizar</button>
+      <span class="m" id="csum" style="align-self:center"></span>
+    </div>
+    <div id="clist"></div>
+  </div>
 </div>
 <p id="msg" role="status"></p>
 </main>
 <script>
 // URL de tu función admin-orders (ver LEEME): https://TU-PROYECTO.supabase.co/functions/v1/admin-orders
 var API = "";
-var $ = function (i) { return document.getElementById(i); };
+// URL de tu función admin-casos: https://TU-PROYECTO.supabase.co/functions/v1/admin-casos
+var API_CASOS = "";
+var $ =function (i) { return document.getElementById(i); };
 var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
 var cop = function (n) { return "$" + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); };
 var ESTADOS = ["pendiente", "pagado", "enviado", "entregado", "rechazado", "cancelado"];
 var tok = ""; try { tok = sessionStorage.getItem("ml-admin") || ""; } catch (e) {}
 var orders = [];
 
-function call(method, body) {
-  return fetch(API, { method: method, headers: { "x-admin-token": tok, "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
+function call(method, body, url) {
+  return fetch(url || API, { method: method, headers: { "x-admin-token": tok, "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
     .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.error || "Error"); return d; }); });
 }
 function load() {
@@ -86,6 +102,46 @@ $("list").addEventListener("click", function (e) {
   call("POST", { id: id, status: card.querySelector(".s").value, notas: card.querySelector(".n").value })
     .then(load).catch(function (er) { $("msg").textContent = er.message; b.textContent = "Guardar"; });
 });
+/* ---------- Casos jurídicos ---------- */
+var CESTADOS = ["recibido", "en revisión", "pendiente de documentos", "en trámite", "finalizado"];
+var casos = [];
+function loadCasos() {
+  $("msg").textContent = "";
+  if (!API_CASOS) { $("clist").innerHTML = '<p class="m">Falta configurar API_CASOS en admin.html.</p>'; return; }
+  call("GET", null, API_CASOS).then(function (d) { casos = d.casos; renderCasos(); })
+    .catch(function (e) { $("msg").textContent = "No se pudo cargar: " + e.message; });
+}
+function renderCasos() {
+  var f = $("cf").value, rows = casos.filter(function (c) { return !f || c.estado === f; });
+  $("csum").textContent = casos.filter(function (c) { return c.estado !== "finalizado"; }).length + " abiertos de " + casos.length;
+  $("clist").innerHTML = rows.length ? rows.map(function (c) {
+    var tel = String(c.tel).replace(/\D/g, ""); if (tel.length === 10) tel = "57" + tel;
+    var ups = (c.actualizaciones || []).map(function (u) { return "<li>" + new Date(u.fecha).toLocaleDateString("es-CO") + " · " + esc(u.mensaje) + "</li>"; }).join("");
+    return '<div class="o" data-id="' + c.id + '"><h2><span>' + esc(c.nombre) + " · " + esc(c.codigo) + '</span><span class="st">' + esc(c.estado) + "</span></h2>" +
+      '<div class="m">' + new Date(c.created_at).toLocaleString("es-CO") + " · " + esc(c.tema) + (c.ciudad ? " · " + esc(c.ciudad) : "") + " · " + esc(c.tel) + "</div>" +
+      '<p style="white-space:pre-wrap">' + esc(c.resumen) + "</p>" + (ups ? '<div class="m">Novedades que ve el cliente:</div><ul>' + ups + "</ul>" : "") +
+      '<div class="row"><select class="s">' + CESTADOS.map(function (s) { return "<option" + (s === c.estado ? " selected" : "") + ">" + s + "</option>"; }).join("") + "</select>" +
+      '<input class="n" placeholder="Novedad para el cliente (la verá al consultar)" maxlength="500">' +
+      '<input class="i" placeholder="Nota interna (privada)" maxlength="1000" value="' + esc(c.notas_internas || "") + '"><button class="sv">Guardar</button>' +
+      '<a href="https://wa.me/' + tel + '" target="_blank" rel="noopener"><button class="g" type="button" style="width:100%">WhatsApp</button></a></div></div>';
+  }).join("") : '<p class="m">No hay casos.</p>';
+}
+$("clist").addEventListener("click", function (e) {
+  var b = e.target.closest(".sv"); if (!b) return;
+  var card = b.closest(".o");
+  b.textContent = "Guardando…";
+  call("POST", { id: card.getAttribute("data-id"), estado: card.querySelector(".s").value, mensaje: card.querySelector(".n").value, notas_internas: card.querySelector(".i").value }, API_CASOS)
+    .then(loadCasos).catch(function (er) { $("msg").textContent = er.message; b.textContent = "Guardar"; });
+});
+function tab(which) {
+  var cas = which === "casos";
+  $("pedidos").hidden = cas; $("casos").hidden = !cas;
+  $("t-ped").className = cas ? "g" : ""; $("t-cas").className = cas ? "" : "g";
+  if (cas) loadCasos();
+}
+$("t-ped").onclick = function () { tab("pedidos"); }; $("t-cas").onclick = function () { tab("casos"); };
+$("cf").onchange = renderCasos; $("crf").onclick = loadCasos;
+
 $("go").onclick = function () { tok = $("tok").value; load(); };
 $("tok").onkeydown = function (e) { if (e.key === "Enter") $("go").click(); };
 $("f").onchange = render; $("rf").onclick = load;

@@ -57,7 +57,7 @@ window.NM = {
       {
         clave: "cafe", titulo: "Café de especialidad",
         texto: "Café de origen Huila de la Asociación Montaña Luminosa, con ficha de cata.",
-        puntos: ["Castillo 86.5 puntos", "Bolsas de 125, 250 y 500 g", "Pago en línea"],
+        puntos: ["Castillo 86.5 y Borbón rosado 88.9 puntos", "Bolsas de 250 g y 500 g", "Pago en línea"],
         boton: "Ir a la página del café", enlace: "cafe.html"
       }
     ]
@@ -69,6 +69,17 @@ window.NM = {
     texto: "Cuéntanos tu situación y te orientamos sobre los caminos legales posibles, con lenguaje sencillo y atención personal.",
     tarjetaProfesional: "",                   // ej. "T.P. 000.000 del C.S. de la J." (si queda vacío, no se muestra)
     universidad: "",                          // opcional
+    /* Seguimiento de casos: pega aquí la dirección de tu función "caso" (ver LEEME).
+       Mientras esté vacío, el caso se envía por WhatsApp y no hay consulta de avance en la página. */
+    casosUrl: "",
+    /* Qué significa cada estado, tal como lo lee el cliente al consultar su proceso. */
+    estados: {
+      "recibido": "Recibimos tu caso. Lo vamos a revisar y te escribimos pronto.",
+      "en revisión": "Estamos analizando tu caso y tus documentos.",
+      "pendiente de documentos": "Necesitamos documentos o información de tu parte. Revisa las novedades.",
+      "en trámite": "Tu caso ya está en marcha. Aquí verás cada novedad.",
+      "finalizado": "Tu caso terminó. Gracias por confiar en nosotros."
+    },
     /* Áreas de atención. EJEMPLOS: reemplázalos por las áreas reales. */
     servicios: [
       { titulo: "Derecho de familia", texto: "Alimentos, custodia, divorcio, sucesiones y acuerdos familiares." },
@@ -137,7 +148,7 @@ window.NM = {
   /* ---------- CAFÉ (cafe.html) ---------- */
   cafe: {
     /* Precios por defecto (pesos colombianos) por tamaño de bolsa. */
-    precios: { 125: 10000, 250: 20000, 500: 40000 },
+    precios: { 250: 20000, 500: 40000 },
 
     /* Pago en línea: pega aquí la dirección de tu función create-checkout (ver LEEME).
        Mientras esté vacío, el pedido se envía por WhatsApp y se paga por transferencia. */
@@ -148,15 +159,11 @@ window.NM = {
     cuentas: [],
 
     /* Variedades. Para completar una ficha de cata agrega: puntaje, proceso, aroma, sabor, acidez, cuerpo, altura, origen.
-       Para un precio propio: precios: { 125: 0, 250: 0, 500: 0 }  */
+       Para un precio propio: precios: { 250: 0, 500: 0 }  */
     variedades: [
       { id: "castillo", nombre: "Castillo", puntaje: 86.5, proceso: "Lavado", aroma: "Frutal", sabor: "Frutas cítricas, chocolatadas",
         acidez: "Limpia y brillante", cuerpo: "Muy balanceado", altura: "1800 msnm", origen: "Palermo, Huila, Colombia", foto: true },
-      { id: "borbon-rosado", nombre: "Borbón rosado" },
-      { id: "pacamara", nombre: "Pacamara" },
-      { id: "papayo", nombre: "Papayo" },
-      { id: "caturra", nombre: "Caturra" },
-      { id: "geisha", nombre: "Geisha" }
+      { id: "borbon-rosado", nombre: "Borbón rosado", puntaje: 88.9, precios: { 250: 33000, 500: 65000 } }
     ],
 
     /* Texto "¿Quiénes somos?" de la Asociación Montaña Luminosa */
