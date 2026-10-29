@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Café de especialidad del Huila · NM y Montaña Luminosa</title>
+<meta name="description" content="Café de especialidad del Huila en seis variedades. Bolsas de 125, 250 y 500 g. Compra en línea.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Café de especialidad del Huila · NM y Montaña Luminosa">
+<meta property="og:description" content="Café de especialidad del Huila en seis variedades. Bolsas de 125, 250 y 500 g. Compra en línea.">
+<meta name="theme-color" content="#0d3b4a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body data-page="cafe">
+<div id="site-header"></div>
+<main>
+
+  <section class="band hero" id="inicio">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <span class="mark mark-hero" role="img" aria-label="Logo de la Asociación Montaña Luminosa"></span>
+          <p class="eyebrow">NM · Café de especialidad · Origen Huila</p>
+          <h1>Café de especialidad del Huila, directo de <em>quienes lo producen</em></h1>
+          <p class="lead">Café de la Asociación Montaña Luminosa, comercializado por NM con precio justo para el campesino. Elige variedad, tamaño y molienda, y paga en línea.</p>
+          <div class="chips" aria-label="Resumen">
+            <span class="chip">Castillo · 86.5 puntos</span>
+            <span class="chip">125 · 250 · 500 g</span>
+            <span class="chip">6 variedades</span>
+          </div>
+          <div class="cta-row">
+            <a class="btn btn-gold arrow" href="#tienda">Elegir mi café</a>
+            <a class="btn btn-line" href="#negociar">Compras al por mayor</a>
+          </div>
+        </div>
+        <figure class="hero-photo">
+          <img src="img/bolsa-nueva.webp" alt="Nueva presentación de la bolsa de 500 g de café Montaña Luminosa, café de origen Huila, edición Miss Universe Switzerland" width="500" height="1120">
+          <figcaption>Nueva presentación, bolsa de 500 g.</figcaption>
+        </figure>
+      </div>
+    </div>
+    <svg class="ridge" viewBox="0 0 1200 110" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path d="M0 110 L0 78 L90 52 L170 70 L280 24 L370 62 L470 36 L560 74 L680 18 L770 58 L860 40 L960 72 L1060 34 L1130 56 L1200 44 L1200 110 Z"/>
+    </svg>
+  </section>
+<section class="section" id="tienda">
+    <div class="wrap">
+      <p class="eyebrow">Tienda</p>
+      <h2>Elige tu variedad y mira su ficha de cata</h2>
+      <p class="intro">Cada variedad tiene su propio perfil y su propio precio. Selecciónala, revisa la cata y agrégala al carrito. Puedes combinar varias en un mismo pedido.</p>
+
+      <div class="vpick" id="vpick" role="group" aria-label="Variedades"></div>
+
+      <div class="shop">
+        <article class="ficha" id="ficha" aria-live="polite"></article>
+
+        <div class="buy">
+          <h3 id="buy-title">Tu selección</h3>
+          <fieldset class="field" style="border:0;padding:0;margin:0;">
+            <legend>Tamaño</legend>
+            <div class="sizes-pick" id="sizes"></div>
+            <p class="note-small" id="size-note"></p>
+          </fieldset>
+          <div class="field">
+            <label for="molienda-sel">Tipo de molienda</label>
+            <select id="molienda-sel"></select>
+            <p class="hint" id="molienda-tip"></p>
+          </div>
+          <div class="buy-row">
+            <div class="field">
+              <label for="qty">Cantidad</label>
+              <div class="qty">
+                <button type="button" id="qty-minus" aria-label="Menos">−</button>
+                <input id="qty" type="number" inputmode="numeric" min="1" max="99" value="1">
+                <button type="button" id="qty-plus" aria-label="Más">+</button>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-solid btn-wide" id="add" type="button">Agregar al carrito</button>
+          <p class="add-status" id="add-status" role="status"></p>
+        </div>
+      </div>
+      <template id="foto-tpl"><img class="ficha-img" src="img/sobres.jpg" alt="Sobres kraft de café con la ficha de cata impresa en la etiqueta: variedad Castillo, proceso lavado, puntaje 86.5, altura 1800 msnm" width="975" height="1300"></template>
+    </div>
+  </section>
+
+<section class="section" id="molienda">
+    <div class="wrap">
+      <div class="beans-grid">
+        <img src="img/granos.jpg" alt="Bolsa transparente llena de granos de café tostado, con bolsas Montaña Luminosa al fondo" width="975" height="1300">
+        <div>
+          <p class="eyebrow">Molienda</p>
+          <h2>Te lo entregamos con la molienda que necesitas</h2>
+          <p class="intro">Pide el grano entero para moler en casa, o dinos cómo preparas el café y lo molemos para ese método.</p>
+          <ul class="brew" id="brew"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <section class="section cart-sec" id="carrito">
+    <div class="wrap">
+      <p class="eyebrow">Carrito y pago</p>
+      <h2 id="cart-h2">Revisa tu pedido y paga por transferencia</h2>
+      <p class="intro" id="cart-intro">Agrega todas las variedades que quieras. Al terminar, envías el pedido por WhatsApp, hacemos la confirmación y pagas por transferencia.</p>
+      <div class="pay-banner" id="pay-banner" role="status" hidden></div>
+
+      <div class="cart-grid">
+        <form class="cart-card" id="carrito-form" autocomplete="off">
+          <h3>Tu carrito</h3>
+          <ul class="cart-list" id="cart-list"></ul>
+          <div class="cart-empty" id="cart-empty">
+            <p>Tu carrito está vacío. Elige una variedad en la tienda y pulsa "Agregar al carrito".</p>
+            <a class="btn btn-ghost btn-sm" href="#tienda">Ir a la tienda</a>
+          </div>
+          <div class="cart-total" id="cart-total-box" hidden>
+            <span>Subtotal, sin envío</span>
+            <b id="cart-total">$0</b>
+          </div>
+
+          <div class="fields">
+            <div class="fields-2">
+              <div class="field">
+                <label for="c-nombre">Tu nombre</label>
+                <input id="c-nombre" type="text" placeholder="Nombre y apellido" maxlength="80">
+              </div>
+              <div class="field">
+                <label for="c-tel">Celular</label>
+                <input id="c-tel" type="text" inputmode="tel" placeholder="Ej. 300 000 0000" maxlength="20">
+              </div>
+            </div>
+            <div class="field" id="f-email" hidden>
+              <label for="c-email">Correo electrónico</label>
+              <input id="c-email" type="email" inputmode="email" placeholder="Para enviarte la confirmación" maxlength="120" autocomplete="email">
+            </div>
+            <div class="fields-2">
+              <div class="field">
+                <label for="c-ciudad">Ciudad de entrega</label>
+                <input id="c-ciudad" type="text" placeholder="Ej. Neiva" maxlength="60">
+              </div>
+              <div class="field">
+                <label for="c-dir">Dirección o barrio</label>
+                <input id="c-dir" type="text" placeholder="Opcional" maxlength="100">
+              </div>
+            </div>
+          </div>
+
+          <p class="preview-label" id="c-prev-label">Mensaje que se enviará</p>
+          <div class="preview" id="c-preview" aria-live="polite"></div>
+          <div class="order-actions">
+            <button class="btn btn-solid btn-wide" id="c-pagar" type="button" hidden>Pagar con Mercado Pago</button>
+            <a class="btn btn-solid btn-wide" id="c-enviar" href="#" target="_blank" rel="noopener">Enviar pedido por WhatsApp</a>
+            <button class="btn btn-ghost btn-wide" id="c-copiar" type="button">Copiar mensaje</button>
+          </div>
+          <p class="status" id="c-estado" role="status"></p>
+          <p class="phones">Si prefieres escribir tú: <b data-tels></b></p>
+        </form>
+
+        <aside class="pay">
+          <div class="pay-box">
+            <h3>Pago por transferencia</h3>
+            <ol class="steps">
+              <li>Envías tu pedido por WhatsApp con el botón de este carrito.</li>
+              <li>Te confirmamos disponibilidad, valor del envío y total.</li>
+              <li>Haces la transferencia a la cuenta que te indicamos.</li>
+              <li>Nos envías el comprobante por el mismo chat y coordinamos la entrega.</li>
+            </ol>
+            <div class="accts" id="accts"></div>
+            <p class="pay-note" id="pay-note"></p>
+          </div>
+          <img src="img/mano500.jpg" alt="Mano sosteniendo la bolsa de 500 g Montaña Luminosa, café de origen Huila" width="975" height="1300">
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <a class="fab" id="fab" href="#carrito" hidden></a>
+
+<section class="section deal" id="negociar">
+    <div class="wrap">
+      <p class="eyebrow">Mayoristas y negociación</p>
+      <h2>¿Compras en cantidad? Hablemos</h2>
+      <p class="intro">Para cafeterías, tiendas, regalos corporativos y eventos. Cuéntanos qué necesitas y qué precio tienes en mente, y te respondemos con una propuesta.</p>
+
+      <div class="deal-grid">
+        <ul class="deal-list">
+          <li><b>Tú propones</b><span>Escribe la cantidad, la frecuencia y el valor que buscas. Todo se conversa.</span></li>
+          <li><b>Varias variedades</b><span>Puedes combinar las que te interesen en un mismo pedido.</span></li>
+          <li><b>Molienda a tu medida</b><span>Indica el método de preparación de tu negocio y lo entregamos así.</span></li>
+        </ul>
+
+        <form class="order" id="negocio" autocomplete="off">
+          <h3>Solicitar propuesta</h3>
+          <p>Completa lo que sepas. El mensaje se arma solo y se abre en WhatsApp.</p>
+          <div class="fields">
+            <div class="fields-2">
+              <div class="field">
+                <label for="n-nombre">Nombre o negocio</label>
+                <input id="n-nombre" type="text" placeholder="Ej. Café La Esquina" maxlength="80">
+              </div>
+              <div class="field">
+                <label for="n-tipo">Tipo de cliente</label>
+                <select id="n-tipo">
+                  <option>Cafetería o restaurante</option>
+                  <option>Tienda o distribuidor</option>
+                  <option>Regalos corporativos</option>
+                  <option>Evento</option>
+                  <option>Otro</option>
+                </select>
+              </div>
+            </div>
+            <fieldset class="field">
+              <legend>Variedades de interés</legend>
+              <div class="checks" id="n-vars"></div>
+            </fieldset>
+            <div class="fields-2">
+              <div class="field">
+                <label for="n-cantidad">Cantidad aproximada (kg)</label>
+                <input id="n-cantidad" type="number" inputmode="decimal" min="1" max="9999" placeholder="Ej. 20">
+              </div>
+              <div class="field">
+                <label for="n-frecuencia">Frecuencia</label>
+                <select id="n-frecuencia">
+                  <option>Una sola vez</option>
+                  <option>Semanal</option>
+                  <option>Quincenal</option>
+                  <option>Mensual</option>
+                </select>
+              </div>
+            </div>
+            <div class="fields-2">
+              <div class="field">
+                <label for="n-molienda">Molienda que buscas</label>
+                <select id="n-molienda"></select>
+              </div>
+              <div class="field">
+                <label for="n-ciudad">Ciudad</label>
+                <input id="n-ciudad" type="text" placeholder="Ej. Bogotá" maxlength="60">
+              </div>
+            </div>
+            <div class="field">
+              <label for="n-propuesta">Tu propuesta de precio</label>
+              <input id="n-propuesta" type="text" placeholder="Ej. $35.000 por bolsa de 500 g" maxlength="80">
+            </div>
+            <div class="field">
+              <label for="n-mensaje">Cuéntanos qué necesitas</label>
+              <textarea id="n-mensaje" placeholder="Fechas, uso del café, presentación que prefieres…" maxlength="500"></textarea>
+            </div>
+          </div>
+
+          <p class="preview-label">Mensaje que se enviará</p>
+          <div class="preview" id="n-preview" aria-live="polite"></div>
+          <div class="order-actions">
+            <a class="btn btn-solid btn-wide" id="n-enviar" href="#" target="_blank" rel="noopener">Abrir WhatsApp con mi propuesta</a>
+            <button class="btn btn-ghost btn-wide" id="n-copiar" type="button">Copiar mensaje</button>
+          </div>
+          <p class="status" id="n-estado" role="status"></p>
+          <p class="phones">También puedes escribir directo: <b data-tels></b></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="section story-sec" id="asociacion">
+    <div class="wrap">
+      <p class="eyebrow">¿Quiénes somos?</p>
+      <h2 id="aso-title"></h2>
+      <div class="story-grid">
+        <div class="story" id="aso-text"></div>
+        <figure class="photo-card">
+          <img src="img/bolsa-nueva.webp" alt="Bolsa de café Montaña Luminosa, nueva presentación" width="500" height="1120" style="aspect-ratio:3/4;object-fit:contain;background:radial-gradient(circle at 50% 40%,#1a5164,#0a2e3b);padding:14px">
+          <figcaption>La nueva presentación de la bolsa: café de origen, con la silueta del Huila y la ficha en el empaque.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+<section class="section story-sec" id="historia">
+    <div class="wrap">
+      <p class="eyebrow">Historia</p>
+      <h2>Un proyecto que logra traspasar fronteras</h2>
+      <div class="story-grid">
+        <div class="story">
+          <p class="big">Mujeres colombianas que se unen al trabajo de las familias cafeteras del Huila.</p>
+          <p>Montaña Luminosa nace del trabajo conjunto de mujeres colombianas, familias caficultoras y varios emprendedores del departamento del Huila.</p>
+          <p>Después de participar en la feria Expolat 2022, la Asociación Tienda Interactiva Montaña Luminosa creó una alianza con la presidenta de Miss Universo Switzerland. De ahí sale esta segunda edición, "Belleza con Propósito": una línea de café exclusiva que reúne la pasión y el amor por el grano.</p>
+          <ul class="credits">
+            <li><small>Gestora cultural</small><span>Lexis María Losada Losada</span></li>
+            <li><small>Productora y representante legal de la Asociación</small><span>Nancy Casas Montilla</span></li>
+          </ul>
+        </div>
+        <figure class="photo-card">
+          <img src="img/reverso.jpg" alt="Reverso de la bolsa con la historia de Montaña Luminosa impresa en español e inglés" width="975" height="1300">
+          <figcaption>Esta historia está impresa en el reverso de cada bolsa, en español y en inglés.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="section trust">
+    <div class="wrap">
+      <p class="eyebrow">Para comprar tranquilo</p>
+      <h2>Lo que puedes comprobar antes de pedir</h2>
+      <p class="intro">Lo que ves en esta página está impreso en el empaque o se puede confirmar hablando con nosotros.</p>
+      <ul class="proofs">
+        <li><strong>Origen a la vista</strong><span>El empaque lleva la leyenda "Café de origen Huila". La etiqueta del Castillo indica Palermo, Huila, a 1800 msnm.</span></li>
+        <li><strong>Puntaje en la etiqueta</strong><span>El 86.5 del Castillo y sus notas de cata van escritos en el empaque. No es una cifra de la página web.</span></li>
+        <li><strong>Hay una asociación detrás</strong><span>La Asociación Tienda Interactiva Montaña Luminosa figura en la bolsa, con el nombre de su representante legal.</span></li>
+        <li><strong>Precio justo para el campesino</strong><span>NM comercializa este café para que el productor reciba un pago justo y se reduzca la brecha en el campo.</span></li>
+        <li><strong>Fotos reales</strong><span>Las fotos de esta página son de las bolsas y sobres reales.</span></li>
+        <li><strong>Hablas con una persona</strong><span>WhatsApp <b data-tels style="font-weight:500"></b>. Pregunta lo que quieras antes de decidir.</span></li>
+        <li><strong>Empaque más amable con el ambiente</strong><span>La bolsa de 500 g es biodegradable y está elaborada a base de caña de azúcar.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="dudas">
+    <div class="wrap">
+      <p class="eyebrow">Preguntas frecuentes</p>
+      <h2>Antes de pedir</h2>
+      <div class="faq">
+        <details><summary>¿Qué tamaños y precios tienen?</summary><p>Bolsas de 125 g, 250 g y 500 g. El precio depende de la variedad: selecciónala en la tienda y verás el valor de cada tamaño. El envío se confirma por WhatsApp según tu ciudad.</p></details>
+        <details><summary>¿Qué molienda elijo?</summary><p>Depende de cómo preparas el café: gruesa para prensa francesa, media para filtrado (V60, Chemex, goteo), media-fina para moka y fina para espresso. Si no sabes, elige "No sé, recomiéndenme" y te orientamos.</p></details>
+        <details><summary>¿Qué significa 86.5 puntos?</summary><p>Es la nota que recibió el Castillo en una catación, sobre 100. En la escala más usada, un café con 80 puntos o más se considera de especialidad. Con 86.5 queda en el rango alto de ese grupo.</p></details>
+        <details><summary>¿Dónde veo la ficha de cata de cada variedad?</summary><p>En la tienda. Al seleccionar una variedad aparece su ficha con puntaje, proceso, altura y notas de sabor. Si alguna todavía no la muestra, pídela por WhatsApp.</p></details>
+        <details><summary>¿Cómo pago?</summary><p id="faq-pago"></p></details>
+        <details><summary>¿Puedo negociar un pedido grande?</summary><p>Sí. En la sección "Mayoristas y negociación" indicas cantidad, frecuencia y el precio que propones, y te respondemos con una propuesta.</p></details>
+        <details><summary>¿Quién vende el café?</summary><p>El café es de la Asociación Montaña Luminosa, del Huila, y lo comercializa NM (Nicole Montes). Si tienes dudas sobre tu pedido, escríbenos por WhatsApp.</p></details>
+        <details><summary>¿Qué tiene que ver Miss Universe Switzerland?</summary><p>Esta edición nace de una alianza que la asociación logró con la presidenta de Miss Universo Switzerland tras la feria Expolat 2022. Así lo cuenta el texto impreso en la bolsa.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <a class="fab" id="fab" href="#carrito" hidden></a>
+</main>
+<div id="site-footer"></div>
+<script src="contenido.js"></script>
+<script src="site.js"></script>
+<script>
+(function () {
+  var A = window.NM.cafe.asociacion;
+  document.getElementById("aso-title").textContent = A.titulo;
+  var h = A.parrafos.map(function (p) { return "<p>" + p.replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }) + "</p>"; }).join("");
+  if (A.proposito) h += '<p class="big" style="margin-top:22px;margin-bottom:0;font-size:clamp(19px,2.4vw,23px)">' + A.proposito.replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }) + "</p>";
+  document.getElementById("aso-text").innerHTML = h;
+})();
+</script>
+<script src="cafe.js"></script>
+</body>
+</html>

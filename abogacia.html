@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Asesoría jurídica · Nicole Montes, abogada</title>
+<meta name="description" content="Asesoría jurídica clara y cercana: familia, contratos, laboral, inmuebles y más. Consulta virtual o presencial.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Asesoría jurídica · Nicole Montes, abogada">
+<meta property="og:description" content="Asesoría jurídica clara y cercana: familia, contratos, laboral, inmuebles y más. Consulta virtual o presencial.">
+<meta name="theme-color" content="#0d3b4a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body data-page="abogacia">
+<div id="site-header"></div>
+<main>
+
+  <section class="band hero small">
+    <div class="wrap">
+      <p class="eyebrow">Abogacía</p>
+      <h1 id="hero-title" style="max-width:15em"></h1>
+      <p class="lead" id="hero-text"></p>
+      <div class="cred" id="cred"></div>
+      <div class="cta-row">
+        <a class="btn btn-gold arrow" href="#consulta">Pedir una consulta</a>
+        <a class="btn btn-line" href="#areas">Ver áreas de atención</a>
+      </div>
+    </div>
+    <svg class="ridge" viewBox="0 0 1200 110" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path d="M0 110 L0 78 L90 52 L170 70 L280 24 L370 62 L470 36 L560 74 L680 18 L770 58 L860 40 L960 72 L1060 34 L1130 56 L1200 44 L1200 110 Z"/>
+    </svg>
+  </section>
+
+  <section class="section" id="areas">
+    <div class="wrap">
+      <p class="eyebrow">Áreas de atención</p>
+      <h2>¿En qué te podemos acompañar?</h2>
+      <div class="areas" id="areas-list"></div>
+    </div>
+  </section>
+
+  <section class="section trust">
+    <div class="wrap">
+      <p class="eyebrow">Cómo trabajamos</p>
+      <h2>Cuatro pasos, sin sorpresas</h2>
+      <ol class="pasos" id="pasos"></ol>
+    </div>
+  </section>
+
+  <section class="section" id="consulta">
+    <div class="wrap">
+      <p class="eyebrow">Consulta</p>
+      <h2>Cuéntanos tu caso</h2>
+      <p class="intro">Completa lo que sepas. El mensaje se arma solo y se abre en WhatsApp para que lo envíes. No incluyas datos sensibles ni documentos: los pedimos después, por un canal acordado.</p>
+      <form class="order" id="consulta-form" autocomplete="off" style="margin-top:32px;max-width:760px">
+        <div class="fields">
+          <div class="fields-2">
+            <div class="field"><label for="a-nombre">Tu nombre</label><input id="a-nombre" type="text" maxlength="80" placeholder="Nombre y apellido"></div>
+            <div class="field"><label for="a-ciudad">Ciudad</label><input id="a-ciudad" type="text" maxlength="60" placeholder="Ej. Neiva"></div>
+          </div>
+          <div class="fields-2">
+            <div class="field"><label for="a-tema">Tema</label><select id="a-tema"></select></div>
+            <div class="field"><label for="a-modalidad">Modalidad</label><select id="a-modalidad"><option>Virtual (videollamada o WhatsApp)</option><option>Presencial en Neiva</option><option>Sin preferencia</option></select></div>
+          </div>
+          <div class="field"><label for="a-caso">Resumen de tu situación</label><textarea id="a-caso" maxlength="600" placeholder="Qué ocurrió, desde cuándo y qué buscas lograr."></textarea></div>
+        </div>
+        <p class="preview-label">Mensaje que se enviará</p>
+        <div class="preview" id="a-preview" aria-live="polite"></div>
+        <div class="order-actions">
+          <a class="btn btn-solid btn-wide" id="a-enviar" href="#" target="_blank" rel="noopener">Abrir WhatsApp con mi consulta</a>
+          <button class="btn btn-ghost btn-wide" id="a-copiar" type="button">Copiar mensaje</button>
+        </div>
+        <p class="status" id="a-estado" role="status"></p>
+        <p class="phones">También puedes escribir directo: <b data-tels></b></p>
+      </form>
+      <p class="aviso" id="aviso"></p>
+    </div>
+  </section>
+
+  <section class="section story-sec" id="dudas">
+    <div class="wrap">
+      <p class="eyebrow">Preguntas frecuentes</p>
+      <h2>Antes de escribir</h2>
+      <div class="faq" id="faq"></div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="contenido.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

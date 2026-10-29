@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Planes de viaje por el Huila · Nicole Montes</title>
+<meta name="description" content="Planes de viaje por el Huila: San Agustín, Tatacoa, ruta del café y viajes a tu medida. Cotiza por WhatsApp.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Planes de viaje por el Huila · Nicole Montes">
+<meta property="og:description" content="Planes de viaje por el Huila: San Agustín, Tatacoa, ruta del café y viajes a tu medida. Cotiza por WhatsApp.">
+<meta name="theme-color" content="#0d3b4a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body data-page="turismo">
+<div id="site-header"></div>
+<main>
+
+  <section class="band hero small">
+    <div class="wrap">
+      <p class="eyebrow">Turismo</p>
+      <h1 id="hero-title" style="max-width:15em"></h1>
+      <p class="lead" id="hero-text"></p>
+      <div class="cta-row">
+        <a class="btn btn-gold arrow" href="#planes-sec">Ver planes</a>
+        <a class="btn btn-line" href="#armar">Armar mi viaje</a>
+      </div>
+    </div>
+    <svg class="ridge" viewBox="0 0 1200 110" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path d="M0 110 L0 78 L90 52 L170 70 L280 24 L370 62 L470 36 L560 74 L680 18 L770 58 L860 40 L960 72 L1060 34 L1130 56 L1200 44 L1200 110 Z"/>
+    </svg>
+  </section>
+
+  <section class="section" id="planes-sec">
+    <div class="wrap">
+      <p class="eyebrow">Planes</p>
+      <h2>Elige tu próxima ruta</h2>
+      <div class="filtros" id="filtros" role="group" aria-label="Filtrar planes"></div>
+      <div class="planes" id="planes"></div>
+      <p class="aviso" id="aviso"></p>
+    </div>
+  </section>
+
+  <section class="section deal" id="armar">
+    <div class="wrap">
+      <p class="eyebrow">A tu medida</p>
+      <h2 id="cta-title"></h2>
+      <p class="intro" id="cta-text"></p>
+      <div class="deal-grid">
+        <ul class="deal-list">
+          <li><b>Tú propones</b><span>Destino, fechas y presupuesto. Todo se conversa.</span></li>
+          <li><b>Grupos y familias</b><span>Planes para pocas personas o grupos más grandes.</span></li>
+          <li><b>Ruta del café</b><span>Puedes sumar una visita al entorno cafetero a cualquier viaje.</span></li>
+        </ul>
+        <form class="order" id="viaje-form" autocomplete="off">
+          <h3>Cuéntanos tu viaje</h3>
+          <p>Completa lo que sepas. El mensaje se arma solo y se abre en WhatsApp.</p>
+          <div class="fields">
+            <div class="fields-2">
+              <div class="field"><label for="v-nombre">Tu nombre</label><input id="v-nombre" type="text" maxlength="80"></div>
+              <div class="field"><label for="v-origen">Salen desde</label><input id="v-origen" type="text" maxlength="60" placeholder="Ej. Bogotá"></div>
+            </div>
+            <div class="field"><label for="v-destino">Destino o idea</label><input id="v-destino" type="text" maxlength="100" placeholder="Ej. San Agustín y Tatacoa"></div>
+            <div class="fields-2">
+              <div class="field"><label for="v-personas">Personas</label><input id="v-personas" type="text" inputmode="numeric" maxlength="20" placeholder="Ej. 4"></div>
+              <div class="field"><label for="v-fechas">Fechas aproximadas</label><input id="v-fechas" type="text" maxlength="60" placeholder="Ej. puente de diciembre"></div>
+            </div>
+            <div class="field"><label for="v-presupuesto">Presupuesto aproximado</label><input id="v-presupuesto" type="text" maxlength="60" placeholder="Opcional"></div>
+            <div class="field"><label for="v-notas">Notas</label><textarea id="v-notas" maxlength="500" placeholder="Intereses, edades, movilidad, celebraciones…"></textarea></div>
+          </div>
+          <p class="preview-label">Mensaje que se enviará</p>
+          <div class="preview" id="v-preview" aria-live="polite"></div>
+          <div class="order-actions">
+            <a class="btn btn-solid btn-wide" id="v-enviar" href="#" target="_blank" rel="noopener">Abrir WhatsApp con mi viaje</a>
+            <button class="btn btn-ghost btn-wide" id="v-copiar" type="button">Copiar mensaje</button>
+          </div>
+          <p class="status" id="v-estado" role="status"></p>
+          <p class="phones">También puedes escribir directo: <b data-tels></b></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+<script src="contenido.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

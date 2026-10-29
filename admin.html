@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Pedidos · Montaña Luminosa</title>
+<style>
+:root{--bg:#efe4cd;--card:#fbf5e8;--ink:#2b1b14;--muted:#65503f;--line:#cdb995;--btn:#26160e;--btn-ink:#f3e7d1;--ok:#2f6b3b;--bad:#a63a26}
+@media (prefers-color-scheme:dark){:root{--bg:#170f0b;--card:#21150f;--ink:#f1e5cf;--muted:#c0aa90;--line:#3d2a1e;--btn:#e0a156;--btn-ink:#1d110b;--ok:#7fc58d;--bad:#ef8a76}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,sans-serif;padding:16px}
+main{max-width:900px;margin:0 auto}h1{font-size:24px;margin:8px 0 14px}
+button,select,input,textarea{font:inherit;color:inherit}
+button{background:var(--btn);color:var(--btn-ink);border:0;border-radius:10px;padding:10px 16px;cursor:pointer;min-height:44px}
+button.g{background:transparent;color:var(--ink);border:1px solid var(--line)}
+input,select,textarea{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;width:100%;min-height:44px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.bar>*{width:auto}
+.o{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.o h2{font-size:17px;margin:0 0 4px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.st{font-size:13px;border:1px solid var(--line);border-radius:99px;padding:2px 10px}
+.st.pagado,.st.enviado,.st.entregado{color:var(--ok);border-color:var(--ok)}.st.rechazado,.st.cancelado{color:var(--bad);border-color:var(--bad)}
+.m{color:var(--muted);font-size:14px}ul{margin:8px 0;padding-left:18px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.row>*{flex:1 1 160px}
+#msg{color:var(--bad);min-height:1.4em}
+</style>
+</head>
+<body>
+<main>
+<h1>Pedidos · Montaña Luminosa</h1>
+<div id="login">
+  <p class="m">Escribe tu clave de administrador (la de ADMIN_TOKEN).</p>
+  <div class="bar"><input id="tok" type="password" placeholder="Clave" autocomplete="current-password" style="max-width:320px"><button id="go">Entrar</button></div>
+</div>
+<div id="app" hidden>
+  <div class="bar">
+    <select id="f"><option value="">Todos</option><option>pendiente</option><option>pagado</option><option>enviado</option><option>entregado</option><option>rechazado</option><option>cancelado</option></select>
+    <button class="g" id="rf">Actualizar</button><button class="g" id="out">Salir</button>
+    <span class="m" id="sum" style="align-self:center"></span>
+  </div>
+  <div id="list"></div>
+</div>
+<p id="msg" role="status"></p>
+</main>
+<script>
+// URL de tu función admin-orders (ver LEEME): https://TU-PROYECTO.supabase.co/functions/v1/admin-orders
+var API = "";
+var $ = function (i) { return document.getElementById(i); };
+var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+var cop = function (n) { return "$" + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); };
+var ESTADOS = ["pendiente", "pagado", "enviado", "entregado", "rechazado", "cancelado"];
+var tok = ""; try { tok = sessionStorage.getItem("ml-admin") || ""; } catch (e) {}
+var orders = [];
+
+function call(method, body) {
+  return fetch(API, { method: method, headers: { "x-admin-token": tok, "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
+    .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.error || "Error"); return d; }); });
+}
+function load() {
+  $("msg").textContent = "";
+  if (!API) { $("msg").textContent = "Falta configurar API en admin.html."; return; }
+  call("GET").then(function (d) {
+    orders = d.orders; $("login").hidden = true; $("app").hidden = false;
+    try { sessionStorage.setItem("ml-admin", tok); } catch (e) {}
+    render();
+  }).catch(function (e) { $("msg").textContent = e.message === "No autorizado" ? "Clave incorrecta." : "No se pudo cargar: " + e.message; });
+}
+function render() {
+  var f = $("f").value, rows = orders.filter(function (o) { return !f || o.status === f; });
+  var paid = orders.filter(function (o) { return ["pagado", "enviado", "entregado"].indexOf(o.status) >= 0; });
+  $("sum").textContent = paid.length + " pagados · " + cop(paid.reduce(function (a, o) { return a + o.total; }, 0));
+  $("list").innerHTML = rows.length ? rows.map(function (o) {
+    var items = o.items.map(function (i) { return "<li>" + esc(i.nombre) + " · " + i.size + " g · " + esc(i.molienda) + " × " + i.q + "</li>"; }).join("");
+    var tel = String(o.cliente_tel).replace(/\D/g, ""); if (tel.length === 10) tel = "57" + tel;
+    return '<div class="o" data-id="' + o.id + '"><h2><span>' + esc(o.cliente_nombre) + " · " + cop(o.total) + '</span><span class="st ' + o.status + '">' + o.status + "</span></h2>" +
+      '<div class="m">' + new Date(o.created_at).toLocaleString("es-CO") + " · " + esc(o.ciudad) + (o.direccion ? " · " + esc(o.direccion) : "") + "</div><ul>" + items + "</ul>" +
+      '<div class="m">' + esc(o.cliente_tel) + " · " + esc(o.cliente_email) + (o.mp_payment_id ? " · MP #" + esc(o.mp_payment_id) : "") + "</div>" +
+      '<div class="row"><select class="s">' + ESTADOS.map(function (s) { return "<option" + (s === o.status ? " selected" : "") + ">" + s + "</option>"; }).join("") + "</select>" +
+      '<input class="n" placeholder="Notas (guía de envío, etc.)" maxlength="500" value="' + esc(o.notas || "") + '"><button class="sv">Guardar</button>' +
+      '<a href="https://wa.me/' + tel + '" target="_blank" rel="noopener"><button class="g" type="button" style="width:100%">WhatsApp</button></a></div></div>';
+  }).join("") : '<p class="m">No hay pedidos.</p>';
+}
+$("list").addEventListener("click", function (e) {
+  var b = e.target.closest(".sv"); if (!b) return;
+  var card = b.closest(".o"), id = card.getAttribute("data-id");
+  b.textContent = "Guardando…";
+  call("POST", { id: id, status: card.querySelector(".s").value, notas: card.querySelector(".n").value })
+    .then(load).catch(function (er) { $("msg").textContent = er.message; b.textContent = "Guardar"; });
+});
+$("go").onclick = function () { tok = $("tok").value; load(); };
+$("tok").onkeydown = function (e) { if (e.key === "Enter") $("go").click(); };
+$("f").onchange = render; $("rf").onclick = load;
+$("out").onclick = function () { try { sessionStorage.removeItem("ml-admin"); } catch (e) {} location.reload(); };
+if (tok) load();
+</script>
+</body>
+</html>
